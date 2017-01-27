@@ -72,6 +72,39 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
+
+    // set a constant render texture size
+    const int RENDER_TEXTURE_SIZE = 256;
+
+    // create a render texture
+    _mRenderTexture = cocos2d::RenderTexture::create(RENDER_TEXTURE_SIZE, RENDER_TEXTURE_SIZE, cocos2d::Texture2D::PixelFormat::RGBA8888);
+
+    // create a texture for the render texture
+    sprite = Sprite::create("HelloWorld.png");
+
+    // place the texture sprite at the origin to show on the render texture
+    sprite->setPosition(Vec2(origin.x+sprite->boundingBox().size.width/2, origin.y+sprite->boundingBox().size.height/2));
+
+    // add the sprite as a child to this layer
+    this->addChild(sprite, 0);
+
+    // begin drawing on the render texture
+    _mRenderTexture->begin();
+
+    // draw to the render texture
+    sprite->visit();
+
+    // end drawing on the render texture
+    _mRenderTexture->end();
+
+    // get the sprite from the render texture
+    sprite = _mRenderTexture->getSprite();
+
+    // set the render texture position
+    sprite->setPosition(Vec2(origin.x+sprite->boundingBox().size.width/2, origin.y+2*sprite->boundingBox().size.height/2));
+
+    // add the RenderText sprite as a child to this layer
+    this->addChild(sprite, 0);
     
     return true;
 }
